@@ -20,6 +20,18 @@
     color: #6f6f8a;
 }
 
+.item {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    margin-bottom: 8px;
+}
+
+.item:hover {
+    transition: color 0.5s;
+    color: #d9d4fa;
+}
+
 .list header {
     background-color: #bc9bff;
     display: flex;
@@ -36,13 +48,19 @@
     height: 64px;
 }
 
+.mmen {
+    height: 34px;
+    width: 34px;
+    color: white;
+}
+
 .list header a {
     width: 260px;
     margin-left: auto;
     margin-top: 0;
 }
 
-.list header button {
+.bb {
     height: 60px;
     width: 60px;
     border-radius: 4px;
@@ -55,3 +73,4 @@
 .list header button:hover {
     border-color: #999;
 }
+
