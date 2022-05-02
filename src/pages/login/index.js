@@ -1,24 +1,28 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import api from '../../services/api'
 import './styles.css';
 import logo from '../../assets/Astronaut-and-Saturn-cartoon-illustration-vector-removebg-preview 1.png';
 
-export default function Login({ History }){
+export default function Login({ history }){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const data = {email, password};
 
     async function handleLogin(e) {
         e.preventDefault();
 
         try{
 
-            const response = await api.post('/login', {email, password});
+            const response = await api.post('/login', data);
+
+            console.log(response.data);
 
             localStorage.setItem('token', response.data.token);
-            localStorage.setItem('provider', response.data.provider);
-            localStorage.setItem('Caixa', response.data.Caixa);
-            localStorage.setItem('Operator', response.data.Operator);
+            localStorage.setItem('provider', response.data.user.Provider);
+            localStorage.setItem('Caixa', response.data.user.Caixa);
+            localStorage.setItem('Operator', response.data.user.Operator);
 
+            history.push('/home');
         }catch (err){
             alert('ocoreu um erro: ' + err);
         }

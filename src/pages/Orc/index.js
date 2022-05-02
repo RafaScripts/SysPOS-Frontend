@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { slide as Menu } from 'react-burger-menu';
 import logo from '../../assets/Astronaut-and-Saturn-cartoon-illustration-vector-removebg-preview 1.png';
-import { FiAlignJustify, FiMonitor, FiPower } from 'react-icons/fi'
+import { FiAlignJustify, FiMonitor, FiPower, FiEye } from 'react-icons/fi'
+import { DateTime } from "react-intl-datetime-format";
 import './styles.css';
+import api from '../../services/api';
+
 var styles = {
     bmBurgerButton: {
         position: 'fixed',
@@ -48,12 +51,33 @@ items = [
 
 ]
 
-export default function Home({ history }) {
+export default function Orc({ history }) {
+    const [orcamentos, setOrcamentos] = useState([]);
+
+    useEffect(() => {
+        async function loadOrc(){
+            const token = localStorage.getItem('token')
+            const response = await api.get('/orcamentos', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            setOrcamentos(response.data);
+        }
+        loadOrc();
+    });
 
     async function handleLogout(){
         await localStorage.clear();
 
         history.push('/');
+    }
+
+    async function GoToDetail(id){
+        await localStorage.setItem('id', id);
+
+        history.push('/orcamento/detail');
     }
 
     return(
@@ -75,8 +99,33 @@ export default function Home({ history }) {
             </header>
 
             <img className='backs' src={logo}/>
+            <div className='ORC'>
+                <h2>Orçamentos:</h2>
+                <hr/>
 
-            <h2>Em Desenvolvimento da tela Principal</h2>
+                <table className='table'>
+                    <tr>
+                        <th>ID</th>
+                        <th>Vendedor</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                        <th>Valor Total</th>
+                        <th>Ver</th>
+                    </tr>
+                    {orcamentos.map(val => {
+                        return(
+                            <tr key={val.id}>
+                                <td>{val.id}</td>
+                                <td>{val.username}</td>
+                                <td><DateTime>{val.created_at}</DateTime></td>
+                                <td>COD:{val.statuss} {val.status}</td>
+                                <td>{val.valor_total}</td>
+                                <td><button className='bbb' onClick={() => GoToDetail(val.id)}><FiEye className='eye'/></button></td>
+                            </tr>
+                        )
+                    })}
+                </table>
+            </div>
         </div>
     );
 }
