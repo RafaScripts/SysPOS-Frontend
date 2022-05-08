@@ -74,8 +74,11 @@ export default function Orc({ history }) {
         history.push('/');
     }
 
-    async function GoToDetail(id){
-        await localStorage.setItem('id', id);
+    async function GoToDetail(products_id, username, status, statuss){
+        await localStorage.setItem('username', username);
+        await localStorage.setItem('status', status);
+        await localStorage.setItem('statuss', statuss);
+        await localStorage.setItem('pID', products_id);
 
         history.push('/orcamento/detail');
     }
@@ -120,7 +123,7 @@ export default function Orc({ history }) {
                                 <td><DateTime>{val.created_at}</DateTime></td>
                                 <td>COD:{val.statuss} {val.status}</td>
                                 <td>{val.valor_total}</td>
-                                <td><button className='bbb' onClick={() => GoToDetail(val.id)}><FiEye className='eye'/></button></td>
+                                <td><button className='bbb' onClick={() => GoToDetail(val.products_id, val.username, val.statuss, val.status)}><FiEye className='eye'/></button></td>
                             </tr>
                         )
                     })}
