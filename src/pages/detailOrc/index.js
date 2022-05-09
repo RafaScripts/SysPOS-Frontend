@@ -3,7 +3,9 @@ import api from "../../services/api";
 import { Link } from 'react-router-dom';
 import { slide as Menu } from 'react-burger-menu';
 import logo from '../../assets/Astronaut-and-Saturn-cartoon-illustration-vector-removebg-preview 1.png';
-import { FiAlignJustify, FiMonitor, FiPower } from 'react-icons/fi'
+import {FiAlignJustify, FiEye, FiMonitor, FiPower} from 'react-icons/fi';
+//import pdf from 'html-pdf';
+//import fs from 'fs';
 import { DateTime } from "react-intl-datetime-format";
 import './styles.css';
 
@@ -53,7 +55,10 @@ items = [
 
 export default function DetailOrc({ history }){
     const [orc, setOrc] = useState([]);
-
+    const [reference, setReference] = useState('');
+    const [nome, setNome] = useState('');
+    const [quantidade, setQuantidade] = useState('');
+    const [valor, setValor] = useState('');
 
     const token = localStorage.getItem('token');
 
@@ -71,13 +76,49 @@ export default function DetailOrc({ history }){
             })
         }
         loadORC();
-    });
-    console.log(orc);
+    }, []);
+    //console.log(orc);
+
+    const sumall = orc.map(item => item.valor).reduce((prev, curr) => prev + curr, 0);
+    //console.log(sumall);
 
     async function handleLogout(){
         await localStorage.clear();
 
         history.push('/');
+    }
+
+    async function productInsert(e){
+        alert('ok')
+    }
+
+
+    async function print(){
+        /*
+        let empresa = 'Elétrica Luz';
+
+        let endereco = 'Av. Alagoas, 452 | Vitória da Conquista - BA';
+
+        let base = `
+        <h1>{empresa}</h1>
+        <h2>{endereco}</h2>
+        <h3>Recibo</h3>
+        <table>
+          <tr>
+             <th>Produto</th>
+             <th>Valor</th>
+          </tr>
+          <tr>
+             <td></td>
+             <td>Valor</td>
+          </tr>
+          <tr>
+             <th>Valor Total</th>
+             <th>R$</th>
+          </tr>
+        </table>
+        `
+        */
     }
 
     return(
@@ -100,13 +141,44 @@ export default function DetailOrc({ history }){
             <div>
                 <h1>Detalhamento</h1>
                 <div>
-                    {orc.map((value, index) => {
-                        {
-                           
-                        }
-                    })}
+                    <form onSubmit={productInsert}>
+                        <input placeholder='referencia' value={reference} onChange={e => setReference(e.target.value)}/>
+                        <select>
+                            <option>xxxxx</option>
+                            <option>wwwww</option>
+                        </select>
+                        <input placeholder='quantidade' value={quantidade} onChange={e => setQuantidade(e.target.value)}/>
+                        <input placeholder='valor' value={valor} onChange={e => setValor(e.target.value)}/>
+                        <button className='button' type='submit'>Inserir</button>
+                    </form>
+
+                    <table className='table'>
+                        <tr>
+                            <th>ID</th>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Valor</th>
+                        </tr>
+                        {orc.map(val => {
+                            return(
+                                <tr key={val.id}>
+                                    <td>{val.id}</td>
+                                    <td>{val.name}</td>
+                                    <td>{val.quantidade}</td>
+                                    <td>{val.valor}</td>
+                                </tr>
+                            )
+                        })}
+                        <tr>
+                            <th>valor total:</th>
+                            <th>  </th>
+                            <th>  </th>
+                            <th>R$: {sumall}</th>
+                        </tr>
+                    </table>
+                    <button onClick={print}>Imprimir</button>
                 </div>
             </div>
         </div>
-    )
+    );
 }
