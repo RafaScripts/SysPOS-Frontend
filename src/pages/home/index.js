@@ -37,9 +37,9 @@ var styles = {
 let items;
 
 items = [
-    <Link className='item' to='/' >Ponto de Venda</Link>,
+    <Link className='item' to='/pos' >Ponto de Venda</Link>,
     <Link className='item' to='/orcamentos' >Orçamentos</Link>,
-    <Link className='item' to='/' >Produtos</Link>,
+    <Link className='item' to='/produtos' >Produtos</Link>,
     <Link className='item' to='/' >Importar CSV</Link>,
     <Link className='item' to='/' >Importar XML</Link>,
     <Link className='item' to='/' >Usuarios</Link>,
@@ -68,7 +68,7 @@ export default function Home({ history }) {
                     </main>
                 </div>
                 <img src={logo} alt="Logo" />
-                <Link className="button" to="/product"><FiMonitor /> POS</Link>
+                <Link className="button" to="/pos"><FiMonitor /> POS</Link>
                 <button className='bb' type="button" onClick={handleLogout}>
                     <FiPower size={18} color="#FFF" />
                 </button>

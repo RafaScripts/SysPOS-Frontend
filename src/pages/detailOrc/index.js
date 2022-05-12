@@ -44,7 +44,7 @@ let items;
 items = [
     <Link className='item' to='/' >Ponto de Venda</Link>,
     <Link className='item' to='/orcamentos' >Orçamentos</Link>,
-    <Link className='item' to='/' >Produtos</Link>,
+    <Link className='item' to='/produtos' >Produtos</Link>,
     <Link className='item' to='/' >Importar CSV</Link>,
     <Link className='item' to='/' >Importar XML</Link>,
     <Link className='item' to='/' >Usuarios</Link>,
