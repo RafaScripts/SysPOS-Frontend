@@ -42,6 +42,11 @@ export default function POS() {
                     </tbody>
                 </table>
             </div>
+            <div>
+                <button>Finalizar</button>
+                <button>Imprimir</button>
+                <button>Cancelar</button>
+            </div>
 
         </div>
     );

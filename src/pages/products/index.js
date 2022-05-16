@@ -3,7 +3,7 @@ import api from '../../services/api';
 import { Link } from 'react-router-dom';
 import { slide as Menu } from 'react-burger-menu';
 import logo from '../../assets/Astronaut-and-Saturn-cartoon-illustration-vector-removebg-preview 1.png';
-import {FiAlignJustify, FiEye, FiMonitor, FiPower, FiTrash2 } from 'react-icons/fi';
+import {FiAlignJustify, FiMonitor, FiPower, FiXCircle } from 'react-icons/fi';
 import './styles.css';
 
 var styles = {
@@ -38,6 +38,8 @@ var styles = {
 
 export default function Products({history}){
     const [products, setProducts] = useState([]);
+    const [reference, setReference] = useState('');
+    const [search, setSearch] = useState([]);
 
     let items = [
         <Link className='item' to='/home'>Home</Link>,
@@ -64,21 +66,34 @@ export default function Products({history}){
         }
         loadProducts();
     }, []);
-
-    async function handleDelete(id) {
-        await api.delete(`/products/${id}`, {
-            headers: {
-                'authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        });
-
-        alert('Produto deletado com sucesso!');
-    }
+    
 
     async function handleLogout() {
         await localStorage.clear();
 
         history.push('/');
+    }
+
+    async function handleSearch(e) {
+        e.preventDefault();
+
+        if(reference === ''){
+            alert('Por favor, preencha o campo de busca!');
+        }else{
+            const response = await api.get(`/itens?reference=${reference}`, {
+                headers: {
+                    'authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            setSearch(response.data);
+            console.log(search);
+        }
+
+    }
+
+    async function handleSearchClear(){
+        await setSearch([]);
     }
 
     return (
@@ -105,10 +120,44 @@ export default function Products({history}){
             <hr />
 
             <div className="PRD">
+                <form onSubmit={handleSearch}>
+                    <input placeholder='referencia' value={reference} onChange={e => setReference(e.target.value)}/>
+                    <button className='button' type="submit">Pesquisar</button>
+                </form>
+
+                <table className='table'>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Referencia</th>
+                            <th>Descricao</th>
+                            <th>Quantidade</th>
+                            <th>Preco</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {search.map(product => (
+                            <tr key={product.id}>
+                                <td>{product.id}</td>
+                                <td>{product.reference}</td>
+                                <td>{product.name}</td>
+                                <td>{product.quantidade}</td>
+                                <td>{product.Value}</td>
+                                <td>
+                                    <button className='button' type="button" onClick={() => handleSearchClear()}>
+                                        <FiXCircle size={18} color="#FFF" />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+
                 <table className="table">
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Referência</th>
                             <th>Nome</th>
                             <th>Quantidade</th>
                             <th>Preço</th>
@@ -118,14 +167,10 @@ export default function Products({history}){
                         {products.map(product => (
                             <tr key={product.id}>
                                 <td>{product.id}</td>
+                                <td>{product.reference}</td>
                                 <td>{product.name}</td>
                                 <td>{product.quantidade}</td>
                                 <td>{product.Value}</td>
-                                <td>
-                                    <button type="button" onClick={handleDelete(product.id)}>
-                                        <FiTrash2 size={20} color="#FFF" />
-                                    </button>
-                                </td>
                             </tr>
                         ))}
                     </tbody>

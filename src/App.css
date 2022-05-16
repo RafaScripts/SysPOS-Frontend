@@ -32,7 +32,7 @@ form input {
 .button {
   width: 100%;
   height: 55px;
-  background: rgba(155, 116, 211, 0.66);
+  background: rgb(155, 116, 211);
   border:  0;
   border-radius: 8px;
   color: #fff;
@@ -57,5 +57,5 @@ form input {
   left: 38%;
   height: 250px;
   opacity: 60%;
-  z-index: inherit;
+  z-index: -1;
 }
