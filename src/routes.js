@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
@@ -10,6 +8,7 @@ import Orc from "./pages/Orc";
 import DetailOrc from "./pages/detailOrc";
 import Products from "./pages/products";
 import POS from "./pages/POS";
+import ImportCSV from "./pages/importCSV";
 
 export default function Routes(){
     return(
@@ -22,6 +21,7 @@ export default function Routes(){
                 <Route path={'/produtos'} component={Products} />
                 <Route path={'/active'} component={Active} />
                 <Route path={'/pos'} component={POS} />
+                <Route path={'/csv'} component={ImportCSV} />
             </Switch>
         </BrowserRouter>
     )

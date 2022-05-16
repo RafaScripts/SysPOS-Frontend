@@ -4,6 +4,7 @@ import { slide as Menu } from 'react-burger-menu';
 import logo from '../../assets/Astronaut-and-Saturn-cartoon-illustration-vector-removebg-preview 1.png';
 import { FiAlignJustify, FiMonitor, FiPower } from 'react-icons/fi'
 import './styles.css';
+
 var styles = {
     bmBurgerButton: {
         position: 'fixed',
@@ -48,7 +49,7 @@ items = [
 
 ]
 
-export default function Home({ history }) {
+export default function ImportCSV({ history }) {
 
     async function handleLogout(){
         await localStorage.clear();
@@ -76,7 +77,22 @@ export default function Home({ history }) {
 
             <img className='backs' src={logo}/>
 
-            <h2>Em Desenvolvimento da tela Principal</h2>
+            <h2>Importar Produtos em CSV</h2>
+            <hr />
+
+            <p>Para importar Produtos por meio de lista .CSV use esta base para <a>preencher</a> <br />
+                lembre-se de que o arquivo deve estar no formato .CSV e não .XLSX ou .XLS <br />
+                lembre-se tambem de apagar a primeira linha do arquivo .CSV pois ela é o cabeçalho <br />
+            </p>
+
+            <hr />
+
+            <div className="form">
+                <form action="">
+                    <input type="file" name="file" id="file" />
+                    <button type="submit">Importar</button>
+                </form>
+            </div>
         </div>
     );
 }
