@@ -1,8 +1,22 @@
 .base {
-    display: grid;
+    display: block;
 }
+
+.base header {
+    display : flex;
+    justify-content: space-between;
+}
+
+.base header p {
+    padding: 10px;
+    font-size: 20px;
+    margin: 0;
+}
+
+
+
 .content {
-    width: 100%;
+    width: 46%;
     padding: 96px;
     background: #edebff;
     box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
@@ -11,4 +25,25 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-align: center;
 }
+
+.content table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 1px solid #000;
+    margin-left: -50px;
+    margin-top: -70px;
+}
+
+.content table td {
+    padding: 8px;
+    border: 1px solid #000;
+}
+
+.content table th {
+    padding: 8px;
+    border: 1px solid #000;
+}
+
