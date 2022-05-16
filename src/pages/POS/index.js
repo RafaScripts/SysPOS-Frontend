@@ -8,7 +8,7 @@ export default function POS() {
         <div className='base'>
             <header>
                 <p>Ponto de Venda</p>
-                <Link to='/home'> <FiChevronLeft /> </Link>
+                <Link className='button' to='/home'> <FiChevronLeft /> </Link>
             </header>
             <form onSubmit={() => {}}>
                 <input placeholder='reference'/>
