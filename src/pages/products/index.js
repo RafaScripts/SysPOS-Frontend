@@ -157,11 +157,7 @@ export default function Products({history}){
                     <thead>
                         <tr>
                             <th>ID</th>
-<<<<<<< Updated upstream
                             <th>Referência</th>
-=======
-                            <th>Referencia</th>
->>>>>>> Stashed changes
                             <th>Nome</th>
                             <th>Quantidade</th>
                             <th>Preço</th>
