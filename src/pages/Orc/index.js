@@ -53,11 +53,15 @@ items = [
 
 export default function Orc({ history }) {
     const [orcamentos, setOrcamentos] = useState([]);
+    const [id, setId] = useState('');
+    const [page, setPage] = useState('');
+    console.log(page);
+    console.log(id);
 
     useEffect(() => {
         async function loadOrc(){
             const token = localStorage.getItem('token')
-            const response = await api.get('/orcamentos', {
+            const response = await api.get(`/orcamentos?pages=${page}&id=${id}`,  {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -66,7 +70,7 @@ export default function Orc({ history }) {
             setOrcamentos(response.data);
         }
         loadOrc();
-    });
+    }, []);
 
     async function handleLogout(){
         await localStorage.clear();
@@ -78,7 +82,7 @@ export default function Orc({ history }) {
         await localStorage.setItem('username', username);
         await localStorage.setItem('status', status);
         await localStorage.setItem('statuss', statuss);
-        await localStorage.setItem('pID', products_id);
+        await localStorage.setItem('ppID', products_id);
 
         history.push('/orcamento/detail');
     }
@@ -106,27 +110,43 @@ export default function Orc({ history }) {
                 <h2>Orçamentos:</h2>
                 <hr/>
 
+                <div>
+                    <select>
+                        <option value={page} onChange={e => setPage(e.target.value)}>1</option>
+                        <option value={page} onChange={e => setPage(e.target.value)}>2</option>
+                    </select>
+                    <form>
+                        <input type="search" onChange={e => setId(e.target.value)} placeholder="Pesquisar por id" />
+                    </form>
+                </div>
+
                 <table className='table'>
-                    <tr>
-                        <th>ID</th>
-                        <th>Vendedor</th>
-                        <th>Data</th>
-                        <th>Status</th>
-                        <th>Valor Total</th>
-                        <th>Ver</th>
-                    </tr>
-                    {orcamentos.map(val => {
-                        return(
-                            <tr key={val.id}>
-                                <td>{val.id}</td>
-                                <td>{val.username}</td>
-                                <td><DateTime>{val.created_at}</DateTime></td>
-                                <td>COD:{val.statuss} {val.status}</td>
-                                <td>{val.valor_total}</td>
-                                <td><button className='bbb' onClick={() => GoToDetail(val.products_id, val.username, val.statuss, val.status)}><FiEye className='eye'/></button></td>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Vendedor</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th>Valor Total</th>
+                            <th>Ver</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {orcamentos.map(orcamento => (
+                            <tr key={orcamento.id}>
+                                <td>{orcamento.id}</td>
+                                <td>{orcamento.username}</td>
+                                <td><DateTime>{orcamento.created_at}</DateTime></td>
+                                <td>{orcamento.status}</td>
+                                <td>{orcamento.valor_total}</td>
+                                <td>
+                                    <button className='button' type="button" onClick={() => GoToDetail(orcamento.products_id, orcamento.username, orcamento.status, orcamento.statuss)}>
+                                        <FiEye size={18} color="#FFF" />
+                                    </button>
+                                </td>
                             </tr>
-                        )
-                    })}
+                        ))}
+                    </tbody>
                 </table>
             </div>
         </div>

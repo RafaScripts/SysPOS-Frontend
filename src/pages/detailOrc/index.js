@@ -59,25 +59,23 @@ export default function DetailOrc({ history }){
     const [nome, setNome] = useState('');
     const [quantidade, setQuantidade] = useState('');
     const [valor, setValor] = useState('');
+    //console.log(orc);
 
     const token = localStorage.getItem('token');
 
     useEffect(() => {
         async function loadORC(){
-            const ppID = localStorage.getItem('pID');
+            const ppID = localStorage.getItem('ppID');
             const response = await api.get(`/orcamentos?ppID=${ppID}`, {});
 
             const test = response.data;
 
-            test.map(value => {
-                let tt = value.products;
-
-                setOrc(tt.itens);
-            })
+            setOrc(test.products);
         }
         loadORC();
     }, []);
     //console.log(orc);
+
 
     const sumall = orc.map(item => item.valor).reduce((prev, curr) => prev + curr, 0);
     //console.log(sumall);
@@ -88,8 +86,25 @@ export default function DetailOrc({ history }){
         history.push('/');
     }
 
+
+
     async function productInsert(e){
-        alert('ok')
+
+        let data = {
+            id: reference,
+            produto: 'xxxx',
+            quantidade: quantidade,
+            valor: Number(quantidade) * Number(valor)
+        };
+
+        const addItem = () => {
+            const id = Math.max(...orc.map(item => item.id), 0) + 1;
+            setOrc([...orc, data]);
+        }
+
+        addItem();
+        /*setOrc([...orc, data]);*/
+
     }
 
 
@@ -141,7 +156,7 @@ export default function DetailOrc({ history }){
             <div>
                 <h1>Detalhamento</h1>
                 <div>
-                    <form onSubmit={productInsert}>
+                    <form>
                         <input placeholder='referencia' value={reference} onChange={e => setReference(e.target.value)}/>
                         <select>
                             <option>xxxxx</option>
@@ -149,34 +164,40 @@ export default function DetailOrc({ history }){
                         </select>
                         <input placeholder='quantidade' value={quantidade} onChange={e => setQuantidade(e.target.value)}/>
                         <input placeholder='valor' value={valor} onChange={e => setValor(e.target.value)}/>
-                        <button className='button' type='submit'>Inserir</button>
+                        <button className='button' type="button" onClick={() => productInsert(reference, quantidade, valor)}>Inserir</button>
                     </form>
 
                     <table className='table'>
-                        <tr>
-                            <th>ID</th>
-                            <th>Produto</th>
-                            <th>Quantidade</th>
-                            <th>Valor</th>
-                        </tr>
-                        {orc.map(val => {
-                            return(
-                                <tr key={val.id}>
-                                    <td>{val.id}</td>
-                                    <td>{val.name}</td>
-                                    <td>{val.quantidade}</td>
-                                    <td>{val.valor}</td>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Produto</th>
+                                <th>Quantidade</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {orc.map((value, index, array) => (
+                                <tr key={index} >
+                                    <td >{value.id}</td>
+                                    <td>{value.produto}</td>
+                                    <td>{value.quantidade}</td>
+                                    <td>{value.valor}</td>
                                 </tr>
-                            )
-                        })}
-                        <tr>
-                            <th>valor total:</th>
-                            <th>  </th>
-                            <th>  </th>
-                            <th>R$: {sumall}</th>
-                        </tr>
+                            ))}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>valor total:</th>
+                                <th>  </th>
+                                <th>  </th>
+                                <th>R$: {sumall}</th>
+                            </tr>
+                        </tfoot>
                     </table>
                     <button onClick={print}>Imprimir</button>
+                    <button className='button' type="button" onClick={() => {}}>Atualizar</button>
+                    <button className='button' type="button" onClick={() => history.push('/orcamentos')}>voltar</button>
                 </div>
             </div>
         </div>
