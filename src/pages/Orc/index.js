@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { slide as Menu } from 'react-burger-menu';
 import logo from '../../assets/Astronaut-and-Saturn-cartoon-illustration-vector-removebg-preview 1.png';
-import { FiAlignJustify, FiMonitor, FiPower, FiEye } from 'react-icons/fi'
+import { FiAlignJustify, FiMonitor, FiPower, FiEye, FiTrash2 } from 'react-icons/fi'
 import { DateTime } from "react-intl-datetime-format";
 import './styles.css';
 import api from '../../services/api';
@@ -78,13 +78,25 @@ export default function Orc({ history }) {
         history.push('/');
     }
 
-    async function GoToDetail(products_id, username, status, statuss){
+    async function GoToDetail(id, products_id, username, status, statuss){
         await localStorage.setItem('username', username);
         await localStorage.setItem('status', status);
         await localStorage.setItem('statuss', statuss);
         await localStorage.setItem('ppID', products_id);
+        await localStorage.setItem('oID', id);
 
         history.push('/orcamento/detail');
+    }
+
+    async function deleteOrc(id, products_id){
+        const token = localStorage.getItem('token')
+        await api.delete(`/orcamentos?id${id}&ppID${products_id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        history.push('/orcamentos');
     }
 
     return(
@@ -129,6 +141,7 @@ export default function Orc({ history }) {
                             <th>Status</th>
                             <th>Valor Total</th>
                             <th>Ver</th>
+                            <th>Excluir</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -140,8 +153,13 @@ export default function Orc({ history }) {
                                 <td>{orcamento.status}</td>
                                 <td>{orcamento.valor_total}</td>
                                 <td>
-                                    <button className='button' type="button" onClick={() => GoToDetail(orcamento.products_id, orcamento.username, orcamento.status, orcamento.statuss)}>
+                                    <button className='button' type="button" onClick={() => GoToDetail(orcamento.id, orcamento.products_id, orcamento.username, orcamento.status, orcamento.statuss)}>
                                         <FiEye size={18} color="#FFF" />
+                                    </button>
+                                </td>
+                                <td>
+                                    <button className='button' type="button" onClick={() => deleteOrc(orcamento.id, orcamento.products_id)}>
+                                        <FiTrash2 size={18} color="#FFF" />
                                     </button>
                                 </td>
                             </tr>

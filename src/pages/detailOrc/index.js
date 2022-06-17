@@ -136,6 +136,22 @@ export default function DetailOrc({ history }){
         */
     }
 
+    async function updateOrc(){
+        const ppID = localStorage.getItem('ppID');
+        const oID = localStorage.getItem('oID');
+
+        let data = {
+            produtos: orc,
+            valor_total: sumall
+        }
+
+        const response = await api.put(`/orcamentos?ppID=${ppID}&id=${oID}`, data);
+
+        const test = response.data;
+        alert('Orçamento atualizado com sucesso!');
+        history.push('/orcamentos');
+    }
+
     return(
         <div className="list">
             <header>
@@ -154,14 +170,11 @@ export default function DetailOrc({ history }){
                 </button>
             </header>
             <div>
-                <h1>Detalhamento</h1>
+                <h1>Detalhamento: {localStorage.getItem('oID')}</h1>
                 <div>
                     <form>
                         <input placeholder='referencia' value={reference} onChange={e => setReference(e.target.value)}/>
-                        <select>
-                            <option>xxxxx</option>
-                            <option>wwwww</option>
-                        </select>
+                        <input placeholder='nome' value={nome} onChange={e => setNome(e.target.value)} disabled={true}/>
                         <input placeholder='quantidade' value={quantidade} onChange={e => setQuantidade(e.target.value)}/>
                         <input placeholder='valor' value={valor} onChange={e => setValor(e.target.value)}/>
                         <button className='button' type="button" onClick={() => productInsert(reference, quantidade, valor)}>Inserir</button>
@@ -196,7 +209,7 @@ export default function DetailOrc({ history }){
                         </tfoot>
                     </table>
                     <button onClick={print}>Imprimir</button>
-                    <button className='button' type="button" onClick={() => {}}>Atualizar</button>
+                    <button className='button' type="button" onClick={() => updateOrc()}>Atualizar</button>
                     <button className='button' type="button" onClick={() => history.push('/orcamentos')}>voltar</button>
                 </div>
             </div>

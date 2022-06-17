@@ -1,9 +1,29 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { FiChevronLeft } from 'react-icons/fi';
 import './styles.css';
+import api from '../../services/api';
 
 export default function POS() {
+    const [products, setProducts] = useState([]);
+    const [valor_total, setValorTotal] = useState(0);
+    const [desconto, setDesconto] = useState(0);
+    const [valor_final, setValorFinal] = useState(0);
+    const [orcamento, setOrcamento] = useState([]);
+
+    useEffect(() => {
+        async function loadProducts() {
+            const response = await api.get('/itens');
+            setProducts(response.data);
+        }
+        loadProducts();
+    }, []);
+
+    const options = products.map(product => (
+        <option key={product.id} value={product.id}>{product.name}</option>
+    ));
+
+
     return(
         <div className='base'>
             <header>
@@ -13,6 +33,9 @@ export default function POS() {
             <form onSubmit={() => {}}>
                 <input placeholder='reference'/>
                 <input placeholder='nome'/>
+                <select>
+                    {options}
+                </select>
                 <input placeholder='quantidade'/>
                 <button type='submit'>Adicionar</button>
             </form>
