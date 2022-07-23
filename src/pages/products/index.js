@@ -9,7 +9,7 @@ import moment from 'moment';
 
 // MUI
 import { DataGrid } from '@mui/x-data-grid';
-import ProductsGrid from "../../components/productGrid/productgrid";
+import {ProductsGrid} from "../../components/ProductsGrid/productsgrid";
 
 const columns = [
     { field: 'id', headerName: 'ID', width: 30 },
@@ -98,7 +98,6 @@ export default function Products({history}){
     let i = 0;
 
     for(i; i < products.length; i++){
-        console.log(i);
         const base = {
             "id": `${products[i].id}`,
             "reference": `${products[i].reference}`,
@@ -114,12 +113,8 @@ export default function Products({history}){
             "updated_at": `${moment(products[i].update_at).format('DD/MM/YYYY')}`,
             "vendor_id": `${products[i].vendor_id}`
         }
-        console.log(base);
         list.push(base)
     }
-
-    console.log({list: list});
-    
 
     async function handleLogout() {
         await localStorage.clear();
@@ -127,22 +122,19 @@ export default function Products({history}){
         history.push('/');
     }
 
-    async function handleSearch(e) {
-        e.preventDefault();
-
+    async function validateFields(reference) {
         if(reference === ''){
-            alert('Por favor, preencha o campo de busca!');
-        }else{
-            const response = await api.get(`/itens?reference=${reference}`, {
-                headers: {
-                    'authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            setSearch(response.data);
-            console.log(search);
+            alert('Preencha o campo com a referência do produto');
+            return false;
         }
+    }
 
+    async function handleSearch(e) {
+        const test = validateFields(reference);
+        if(test){
+            localStorage.setItem('reference', reference);
+            history.push('/produtos/edit');
+        }
     }
 
     async function handleSearchClear(){
@@ -178,16 +170,8 @@ export default function Products({history}){
                     <button className='button' type="submit">Pesquisar</button>
                 </form>
 
-                <div style={{ height: 400, width: '100%'}}>
-                    <DataGrid
-                        style={{backgroundColor: 'rgba(255,255,255,0.32)', backdropFilter: 'blur(.5rem)'}}
-                        rows={list}
-                        columns={columns}
-                        pageSize={8}
-                        rowCount={list.length}
-                        rowsPerPageOptions={[10, 50, { label: 'All', value: -1 }]}
-                    />
-                </div>
+                <ProductsGrid rows={list} />
+
             </div>
         </div>
     );

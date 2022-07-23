@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import { slide as Menu } from 'react-burger-menu';
 import logo from '../../assets/Astronaut-and-Saturn-cartoon-illustration-vector-removebg-preview 1.png';
 import { FiAlignJustify, FiMonitor, FiPower, FiEye } from 'react-icons/fi'
-import { DateTime } from "react-intl-datetime-format";
 import './styles.css';
 import api from '../../services/api';
+
+// components MUI
+import {OrcGrid} from "../../components/orcGrid/orcgrid";
 
 var styles = {
     bmBurgerButton: {
@@ -120,34 +122,8 @@ export default function Orc({ history }) {
                     </form>
                 </div>
 
-                <table className='table'>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Vendedor</th>
-                            <th>Data</th>
-                            <th>Status</th>
-                            <th>Valor Total</th>
-                            <th>Ver</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {orcamentos.map(orcamento => (
-                            <tr key={orcamento.id}>
-                                <td>{orcamento.id}</td>
-                                <td>{orcamento.username}</td>
-                                <td><DateTime>{orcamento.created_at}</DateTime></td>
-                                <td>{orcamento.status}</td>
-                                <td>{orcamento.valor_total}</td>
-                                <td>
-                                    <button className='button' type="button" onClick={() => GoToDetail(orcamento.products_id, orcamento.username, orcamento.status, orcamento.statuss)}>
-                                        <FiEye size={18} color="#FFF" />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <OrcGrid rowss={orcamentos} />
+
             </div>
         </div>
     );
