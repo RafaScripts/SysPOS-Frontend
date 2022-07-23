@@ -1,4 +1,5 @@
 import React from 'react';
+import './style.css';
 
 // MUI
 import { DataGrid } from '@mui/x-data-grid';
@@ -50,14 +51,24 @@ export const ProductsGrid = ({ rows }) => {
     );
 }
 
-export const ProductsPosGrid = ({ rows }) => {
+export const ProductsPosGrid = ( ) => {
     const columns = [
         { field: 'id', headerName: 'ID', width: 30 },
         { field: 'reference', headerName: 'Referência', width: 130 },
-        { field: 'produto', headerName: 'Produto', width: 130 },
+        { field: 'name', headerName: 'Produto', width: 130 },
         { field: 'quantidade', headerName: 'Quantidade', width: 80 },
         { field: 'value', headerName: 'Preço', width: 80 },
     ];
+    
+    const rows = [
+      {
+        'id': 1,
+        'reference': '1234',
+        'name': 'teste',
+        'quantidade': '5',
+        'value': '15'
+      }
+    ]
 
     async function handleClick(row) {
         const reference = row.reference;
@@ -67,24 +78,26 @@ export const ProductsPosGrid = ({ rows }) => {
     }
 
     return (
-        <div style={{ height: 400, width: '100%' }}>
-            <DataGrid
-                style={{backgroundColor: 'rgba(188,162,255,0.32)', backdropFilter: 'blur(.5rem)', borderRadius: '0.7rem', marginTop: '0.5rem'}}
-                rows={rows}
-                columns={columns}
-                rowHeight={30}
-                headerHeight={30}
-                pageSize={10}
-                onRowClick={(e, row) => {
-
-                    handleClick(row);
-
-                }}
-                rowCount={rows.length}
-                rowClassName={(rowIndex) => {
-                    return rowIndex % 2 === 0 ? 'even' : 'odd';
-                } }
-            />
+      <div className='gridProductsPOS'>
+        <div style={{ height: 300, width: '100%' }}>
+          <DataGrid
+            style={{backgroundColor: 'rgba(188,162,255,0.32)', backdropFilter: 'blur(.5rem)', borderRadius: '0.7rem', marginTop: '0.5rem'}}
+            rows={rows}
+            columns={columns}
+            rowHeight={30}
+            headerHeight={30}
+            pageSize={10}
+            onRowClick={(e, row) => {
+        
+              handleClick(row);
+        
+            }}
+            rowCount={rows.length}
+            rowClassName={(rowIndex) => {
+              return rowIndex % 2 === 0 ? 'even' : 'odd';
+            } }
+          />
         </div>
+      </div>
     );
 }

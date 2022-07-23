@@ -62,6 +62,25 @@ export default function POS() {
     const [Products, setProducts] = useState([]);
     const [id, setId] = useState('');
     const [reference, setReference] = useState('');
+    
+    console.log(Products);
+    
+    const addItemInArray = async (response) => {
+      console.log(response.data);
+      
+      let base = {
+        'id': response.data[0].id,
+        'reference': response.data[0].reference,
+        'quantidade': 1,
+        'value': 'R$2,00'
+      }
+      
+      console.log(base);
+      
+      setProducts(...Products, base);
+      
+      console.log(Products);
+    }
 
     const searchProduct = async (e) => {
         e.preventDefault();
@@ -77,9 +96,20 @@ export default function POS() {
         value = id;
 
         search = filter.id;
+        
+        let token = localStorage.getItem('token');
 
-        const response = await api.get(`/itens?${search}=${value}`);
-        setProducts(...Products ,response.data);
+        const response = await api.get(`/itens?${search}=${value}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        if(response){
+          addItemInArray(response);
+        }
+        
+        
     }
 
     return(
@@ -111,14 +141,9 @@ export default function POS() {
                 </div>
             </div>
 
-            <div className='content'>
-                <ProductsPosGrid rows={Products}/>
-                <div>
-                    <button>Finalizar</button>
-                    <button>Imprimir</button>
-                    <button>Cancelar</button>
-                </div>
-            </div>
+            <ProductsPosGrid/>
+          
+          
 
 
         </div>
