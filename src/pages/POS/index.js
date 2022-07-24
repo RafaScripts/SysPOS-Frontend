@@ -8,6 +8,9 @@ import api from '../../services/api';
 
 //MUI
 import { ProductsPosGrid } from '../../components/ProductsGrid/productsgrid';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Box from '@mui/material/Box';
 
 var styles = {
     bmBurgerButton: {
@@ -62,24 +65,74 @@ export default function POS() {
     const [Products, setProducts] = useState([]);
     const [id, setId] = useState('');
     const [reference, setReference] = useState('');
+    const [quantidade, setQuantidade] = useState(0);
+    const [valor, setValor] = useState('');
+    const [name, setName] = useState('');
+    const [rItem, setRItem] = useState('');
+  const [arItem, setARItem] = useState('');
     
-    console.log(Products);
+    const removeItem = async (reference, id) => {
+      let search;
+      if(reference) search = reference;
+      search = id;
+      
+      for(let i = 0; i < Products.length; i++){
+        if(reference){
+          if(reference === Products[i].reference){
+            Products.splice(i, Products[i]);
+          }
+        }
+        if(id){
+          if(id === Products[i].id){
+            Products.splice(i, Products[i]);
+          }
+        }
+      }
+    }
     
     const addItemInArray = async (response) => {
-      console.log(response.data);
+      
+      let custo = Number(quantidade) * response.data[0].Value;
       
       let base = {
         'id': response.data[0].id,
         'reference': response.data[0].reference,
-        'quantidade': 1,
-        'value': 'R$2,00'
+        'name': response.data[0].name,
+        'quantidade': quantidade,
+        'value': `R$${custo}`
       }
       
-      console.log(base);
+      setProducts(arr => [...Products, base]);
       
-      setProducts(...Products, base);
       
-      console.log(Products);
+    }
+    
+    const consult = async (reference, id) => {
+      let search;
+      let value;
+  
+      if(reference){
+        search = filter.reference;
+      }
+  
+      if(reference){ value = reference };
+  
+      value = id;
+  
+      search = filter.id;
+  
+      let token = localStorage.getItem('token');
+  
+      const response = await api.get(`/itens?${search}=${value}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+  
+      setValor(`R$${response.data[0].Value}`);
+      setName(response.data[0].name);
+      setReference(response.data[0].reference);
+  
     }
 
     const searchProduct = async (e) => {
@@ -109,7 +162,14 @@ export default function POS() {
           addItemInArray(response);
         }
         
+        setValor(`R$${response.data[0].Value}`);
+        setName(response.data[0].name);
+        setReference(response.data[0].reference);
         
+    }
+    
+    const save = () => {
+    
     }
 
     return(
@@ -133,19 +193,43 @@ export default function POS() {
                     <form onSubmit={searchProduct}>
                         <input placeholder='id' value={id} onChange={e => setId(e.target.value)} />
                         <input placeholder='reference' value={reference} onChange={e => setReference(e.target.value)}/>
-                        <input placeholder='nome'/>
-                        <input placeholder='quantidade'/>
-                        <input placeholder='valor' value={'R$14'} disabled/>
+                        <input placeholder='nome' value={name} />
+                        <input placeholder='quantidade' type='number' value={quantidade} onChange={e => {setQuantidade(e.target.value); console.log(quantidade)}}/>
+                        <input placeholder='valor' value={valor} disabled/>
                         <button type='submit'>Adicionar</button>
                     </form>
+  
+                  <button className='consult' type='button' onClick={() => {consult(reference, id)}} >Consultar</button>
                 </div>
             </div>
-
-            <ProductsPosGrid/>
+  
+          <div className='dd' >
+            <div className='box'>
+              <ProductsPosGrid rows={Products}/>
+              <input disabled className='put' placeholder={'id'} value={rItem} onChange={e => setRItem(e.target.value)}/>
+              <input disabled className='put' style={{marginTop: '5px'}} placeholder={'Referencia'} value={arItem} onChange={e => setARItem(e.target.value)}  />
+              <button disabled className='consult' onClick={() => removeItem(rItem, arItem)}>Apagar Item</button>
+              
+              <Box
+                sx={{
+                  display: 'flex',
+                  marginTop: '18px',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  '& > *': {
+                    m: 1,
+                  },
+                }}
+              >
+                <ButtonGroup variant="contained" aria-label="outlined primary button group">
+                  <Button style={{backgroundColor: "#945ee8", borderColor: "#945ee8"}}>Salvar</Button>
+                  <Button style={{backgroundColor: "#945ee8", borderColor: "#945ee8"}}>Apagar</Button>
+                  <Button style={{backgroundColor: "#945ee8"}}>Imprimir</Button>
+                </ButtonGroup>
+              </Box>
+            </div>
+          </div>
           
-          
-
-
         </div>
     );
 }

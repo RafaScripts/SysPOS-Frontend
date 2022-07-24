@@ -7,13 +7,13 @@ import { DataGrid } from '@mui/x-data-grid';
 export const ProductsGrid = ({ rows }) => {
     const columns = [
         { field: 'id', headerName: 'ID', width: 30 },
-        { field: 'reference', headerName: 'Referência', width: 130 },
-        { field: 'produto', headerName: 'Produto', width: 130 },
+        { field: 'reference', headerName: 'Referência', width: 200 },
+        { field: 'produto', headerName: 'Produto', width: 240 },
         { field: 'quantidade', headerName: 'Quantidade', width: 80 },
         { field: 'value', headerName: 'Preço', width: 80 },
         { field: 'value_cust', headerName: 'Preço de Custo', width: 80 },
         { field: 'CEST', headerName: 'CEST', width: 80 },
-        { field: 'NCM', headerName: 'NCM', width: 130 },
+        { field: 'NCM', headerName: 'NCM', width: 200 },
         { field: 'IPI', headerName: 'IPI', width: 80 },
         { field: 'created_at', headerName: 'Cadastrado', width: 130 },
         { field: 'cEAN', headerName: 'cEAN', width: 80 },
@@ -51,24 +51,14 @@ export const ProductsGrid = ({ rows }) => {
     );
 }
 
-export const ProductsPosGrid = ( ) => {
+export const ProductsPosGrid = ({ rows }) => {
     const columns = [
         { field: 'id', headerName: 'ID', width: 30 },
-        { field: 'reference', headerName: 'Referência', width: 130 },
-        { field: 'name', headerName: 'Produto', width: 130 },
-        { field: 'quantidade', headerName: 'Quantidade', width: 80 },
+        { field: 'reference', headerName: 'Referência', width: 200 },
+        { field: 'name', headerName: 'Produto', width: 300 },
+        { field: 'quantidade', headerName: 'Quantidade', width: 120 },
         { field: 'value', headerName: 'Preço', width: 80 },
     ];
-    
-    const rows = [
-      {
-        'id': 1,
-        'reference': '1234',
-        'name': 'teste',
-        'quantidade': '5',
-        'value': '15'
-      }
-    ]
 
     async function handleClick(row) {
         const reference = row.reference;
@@ -78,7 +68,6 @@ export const ProductsPosGrid = ( ) => {
     }
 
     return (
-      <div className='gridProductsPOS'>
         <div style={{ height: 300, width: '100%' }}>
           <DataGrid
             style={{backgroundColor: 'rgba(188,162,255,0.32)', backdropFilter: 'blur(.5rem)', borderRadius: '0.7rem', marginTop: '0.5rem'}}
@@ -98,6 +87,5 @@ export const ProductsPosGrid = ( ) => {
             } }
           />
         </div>
-      </div>
     );
 }

@@ -44,6 +44,29 @@
     justify-content: center;
 }
 
+.dd {
+    padding: 20px;
+}
+
+.bases {
+    display: flex;
+}
+
+.box {
+    width: auto;
+    padding: 20px;
+    background: #edebff;
+    border-radius: 8px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+}
+
 .boxContent {
     width: 98%;
     padding: 20px;
@@ -60,7 +83,20 @@
 }
 
 .boxContent form input {
-    width: auto;
+    width: 180px;
+    margin-left: 18px;
+    height: 40px;
+    color: #333;
+    margin-bottom: 8px;
+    border: 0.001em solid #fff;
+    border-radius: 8px;
+    padding: 0 24px;
+}
+
+.put {
+    width: 180px;
+    margin-top: 18px;
+    margin-left: 18px;
     height: 40px;
     color: #333;
     margin-bottom: 8px;
@@ -70,6 +106,18 @@
 }
 
 .boxContent form button {
+    width: auto;
+    height: 40px;
+    background-color: #945ee8;
+    color: #fff;
+    margin-left: 8px;
+    margin-bottom: 8px;
+    border: 0.001em solid #945ee8;
+    border-radius: 8px;
+    padding: 0 24px;
+}
+
+.consult {
     width: auto;
     height: 40px;
     background-color: #945ee8;
