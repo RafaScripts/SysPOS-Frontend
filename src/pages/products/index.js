@@ -3,8 +3,29 @@ import api from '../../services/api';
 import { Link } from 'react-router-dom';
 import { slide as Menu } from 'react-burger-menu';
 import logo from '../../assets/Astronaut-and-Saturn-cartoon-illustration-vector-removebg-preview 1.png';
-import {FiAlignJustify, FiMonitor, FiPower, FiXCircle } from 'react-icons/fi';
+import {FiAlignJustify, FiMonitor, FiPower, FiEdit } from 'react-icons/fi';
 import './styles.css';
+import moment from 'moment';
+
+// MUI
+import { DataGrid } from '@mui/x-data-grid';
+import {ProductsGrid} from "../../components/ProductsGrid/productsgrid";
+
+const columns = [
+    { field: 'id', headerName: 'ID', width: 30 },
+    { field: 'reference', headerName: 'Referência', width: 130 },
+    { field: 'produto', headerName: 'Produto', width: 130 },
+    { field: 'quantidade', headerName: 'Quantidade', width: 80 },
+    { field: 'value', headerName: 'Preço', width: 80 },
+    { field: 'value_cust', headerName: 'Preço de Custo', width: 80 },
+    { field: 'CEST', headerName: 'CEST', width: 80 },
+    { field: 'NCM', headerName: 'NCM', width: 130 },
+    { field: 'IPI', headerName: 'IPI', width: 80 },
+    { field: 'created_at', headerName: 'Cadastrado', width: 130 },
+    { field: 'cEAN', headerName: 'cEAN', width: 80 },
+    { field: 'updated_at', headerName: 'Atualizado', width: 130 },
+    { field: 'vendor_id', headerName: 'Fornecedor', width: 30 }
+];
 
 var styles = {
     bmBurgerButton: {
@@ -41,6 +62,12 @@ export default function Products({history}){
     const [reference, setReference] = useState('');
     const [search, setSearch] = useState([]);
 
+    const editIcon = (
+        <Link to={'/home'}>
+            <FiEdit color="#a77dff" />
+        </Link>
+    );
+
     let items = [
         <Link className='item' to='/home'>Home</Link>,
         <Link className='item' to='/pos' >Ponto de Venda</Link>,
@@ -61,12 +88,33 @@ export default function Products({history}){
                     'authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             });
-
+            console.log(response.data)
             setProducts(response.data);
         }
         loadProducts();
     }, []);
-    
+
+    let list = [];
+    let i = 0;
+
+    for(i; i < products.length; i++){
+        const base = {
+            "id": `${products[i].id}`,
+            "reference": `${products[i].reference}`,
+            "produto": `${products[i].name}`,
+            "quantidade": `${products[i].quantidade}`,
+            "value": `R$${products[i].Value}`,
+            "CEST":`${products[i].CEST}`,
+            "IPI": `${products[i].IPI}`,
+            "NCM": `${products[i].NCM}`,
+            "cEAN": `${products[i].cEAN}`,
+            "value_cust": `R$${products[i].value_cust}`,
+            "created_at": `${moment(products[i].created_at).format('DD/MM/YYYY')}`,
+            "updated_at": `${moment(products[i].update_at).format('DD/MM/YYYY')}`,
+            "vendor_id": `${products[i].vendor_id}`
+        }
+        list.push(base)
+    }
 
     async function handleLogout() {
         await localStorage.clear();
@@ -74,22 +122,19 @@ export default function Products({history}){
         history.push('/');
     }
 
-    async function handleSearch(e) {
-        e.preventDefault();
-
+    async function validateFields(reference) {
         if(reference === ''){
-            alert('Por favor, preencha o campo de busca!');
-        }else{
-            const response = await api.get(`/itens?reference=${reference}`, {
-                headers: {
-                    'authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            setSearch(response.data);
-            console.log(search);
+            alert('Preencha o campo com a referência do produto');
+            return false;
         }
+    }
 
+    async function handleSearch(e) {
+        const test = validateFields(reference);
+        if(test){
+            localStorage.setItem('reference', reference);
+            history.push('/produtos/edit');
+        }
     }
 
     async function handleSearchClear(){
@@ -125,56 +170,8 @@ export default function Products({history}){
                     <button className='button' type="submit">Pesquisar</button>
                 </form>
 
-                <table className='table'>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Referencia</th>
-                            <th>Descricao</th>
-                            <th>Quantidade</th>
-                            <th>Preco</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {search.map(product => (
-                            <tr key={product.id}>
-                                <td>{product.id}</td>
-                                <td>{product.reference}</td>
-                                <td>{product.name}</td>
-                                <td>{product.quantidade}</td>
-                                <td>{product.Value}</td>
-                                <td>
-                                    <button className='button' type="button" onClick={() => handleSearchClear()}>
-                                        <FiXCircle size={18} color="#FFF" />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <ProductsGrid rows={list} />
 
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Referência</th>
-                            <th>Nome</th>
-                            <th>Quantidade</th>
-                            <th>Preço</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {products.map(product => (
-                            <tr key={product.id}>
-                                <td>{product.id}</td>
-                                <td>{product.reference}</td>
-                                <td>{product.name}</td>
-                                <td>{product.quantidade}</td>
-                                <td>{product.Value}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
             </div>
         </div>
     );

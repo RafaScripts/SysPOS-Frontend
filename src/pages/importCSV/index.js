@@ -5,6 +5,9 @@ import logo from '../../assets/Astronaut-and-Saturn-cartoon-illustration-vector-
 import { FiAlignJustify, FiMonitor, FiPower } from 'react-icons/fi'
 import './styles.css';
 
+//MUI
+import { Input } from '@mui/material';
+
 var styles = {
     bmBurgerButton: {
         position: 'fixed',
@@ -90,6 +93,7 @@ export default function ImportCSV({ history }) {
             <div className="form">
                 <form action="">
                     <input type="file" name="file" id="file" />
+                    <Input type="file" />
                     <button type="submit">Importar</button>
                 </form>
             </div>
