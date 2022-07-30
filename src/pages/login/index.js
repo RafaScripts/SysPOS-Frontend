@@ -17,6 +17,7 @@ export default function Login({ history }){
 
             console.log(response.data);
 
+            localStorage.setItem('user_id', response.data.user.id);
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('provider', response.data.user.Provider);
             localStorage.setItem('Caixa', response.data.user.Caixa);

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import {FiAlignJustify, FiChevronLeft, FiMonitor, FiPower} from 'react-icons/fi';
 import './styles.css';
@@ -61,6 +61,13 @@ const filter = {
     id: 'id'
 }
 
+const status = {
+  Criado: 2,
+  Vendido: 3,
+  Cancelado: 4,
+  Devolucao: 5
+}
+
 export default function POS() {
     const [Products, setProducts] = useState([]);
     const [id, setId] = useState('');
@@ -69,7 +76,44 @@ export default function POS() {
     const [valor, setValor] = useState('');
     const [name, setName] = useState('');
     const [rItem, setRItem] = useState('');
-  const [arItem, setARItem] = useState('');
+    const [arItem, setARItem] = useState('');
+    const [valorTotal, setValorTotal] = useState(0);
+    
+    /*const calculate = async (Products) => {
+      let val;
+      
+      for(let i = 0; i < Products.length; i++){
+        val += Products[i].sum;
+        
+        setValorTotal(val);
+      }
+      
+      return;
+      
+    }*/
+  
+    //calculate(Products);
+    
+    const saveORC = async () => {
+  
+      //calculate(Products);
+      
+      const orc = {
+        user_id: Number(localStorage.getItem('user_id')),
+        produtos: Products,
+        statuss: status.Criado,
+        valor_total: valorTotal
+      }
+      
+      console.log(orc);
+  
+      const response = await api.post(`/orcamentos`, orc, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      
+    }
     
     const removeItem = async (reference, id) => {
       let search;
@@ -90,6 +134,8 @@ export default function POS() {
       }
     }
     
+    
+    
     const addItemInArray = async (response) => {
       
       let custo = Number(quantidade) * response.data[0].Value;
@@ -99,13 +145,15 @@ export default function POS() {
         'reference': response.data[0].reference,
         'name': response.data[0].name,
         'quantidade': quantidade,
-        'value': `R$${custo}`
+        'value': `R$${custo}`,
+        'sum': custo
       }
       
       setProducts(arr => [...Products, base]);
       
-      
     }
+   
+    
     
     const consult = async (reference, id) => {
       let search;
@@ -171,7 +219,17 @@ export default function POS() {
     const save = () => {
     
     }
-
+  
+    useEffect(() => {
+      const sum = async () => {
+        const sumall = Products.map(item => item.sum).reduce((prev, curr) => prev + curr, 0);
+        setValorTotal(sumall);
+        return;
+      }
+      
+      sum();
+    }, [Products]);
+    
     return(
         <div className='base'>
             <header>
@@ -206,6 +264,17 @@ export default function POS() {
           <div className='dd' >
             <div className='box'>
               <ProductsPosGrid rows={Products}/>
+              <table style={{marginTop: '18px'}}>
+                <th>
+                  <p style={{fontSize: '20px'}}>Valor Total:</p>
+                </th>
+                <th>
+                  <p></p>
+                </th>
+                <td>
+                  <p style={{fontSize: '20px'}}>R${valorTotal}</p>
+                </td>
+              </table>
               <input disabled className='put' placeholder={'id'} value={rItem} onChange={e => setRItem(e.target.value)}/>
               <input disabled className='put' style={{marginTop: '5px'}} placeholder={'Referencia'} value={arItem} onChange={e => setARItem(e.target.value)}  />
               <button disabled className='consult' onClick={() => removeItem(rItem, arItem)}>Apagar Item</button>
@@ -222,7 +291,7 @@ export default function POS() {
                 }}
               >
                 <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                  <Button style={{backgroundColor: "#945ee8", borderColor: "#945ee8"}}>Salvar</Button>
+                  <Button style={{backgroundColor: "#945ee8", borderColor: "#945ee8"}} onClick={() => saveORC()}>Salvar</Button>
                   <Button style={{backgroundColor: "#945ee8", borderColor: "#945ee8"}}>Apagar</Button>
                   <Button style={{backgroundColor: "#945ee8"}}>Imprimir</Button>
                 </ButtonGroup>
