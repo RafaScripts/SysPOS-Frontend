@@ -1,0 +1,9 @@
+.gridProductsPOS {
+    width: 46%;
+    padding: 20px;
+    background: #edebff;
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+
+    display: flex;
+}
