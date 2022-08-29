@@ -219,6 +219,10 @@ export default function POS() {
     const save = () => {
     
     }
+
+    const clear = () => {
+      setProducts([]);
+    }
   
     useEffect(() => {
       const sum = async () => {
@@ -292,7 +296,7 @@ export default function POS() {
               >
                 <ButtonGroup variant="contained" aria-label="outlined primary button group">
                   <Button style={{backgroundColor: "#945ee8", borderColor: "#945ee8"}} onClick={() => saveORC()}>Salvar</Button>
-                  <Button style={{backgroundColor: "#945ee8", borderColor: "#945ee8"}}>Apagar</Button>
+                  <Button style={{backgroundColor: "#945ee8", borderColor: "#945ee8"}} onClick={() => clear()}>Apagar</Button>
                   <Button style={{backgroundColor: "#945ee8"}}>Imprimir</Button>
                 </ButtonGroup>
               </Box>
